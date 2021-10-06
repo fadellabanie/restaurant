@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\V1\TableController;
+use App\Http\Controllers\Api\V1\ReservationController;
+use App\Http\Controllers\Api\V1\MealController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::get('check-available-table', [TableController::class, 'checkAvailable']);
+    Route::post('check-available-table', [ReservationController::class, 'checkAvailable']);
+    Route::post('reservation-table', [ReservationController::class, 'reservation']);
+
+    Route::post('meals', [MealController::class, 'list']);
+
+    Route::post('checkout', [TableController::class, 'checkout']);
 });

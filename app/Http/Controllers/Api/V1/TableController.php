@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Models\Reservation;
 use App\Models\Table;
+use App\Models\Reservation;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Tables\CheckAvailableRequest;
 
 class TableController extends Controller
 {
@@ -14,61 +15,9 @@ class TableController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function checkAvailable(Request $request)
+    public function checkout()
     {
-       $reservation =  Reservation::where(function ($query) use ($request) {
-            $query->where('to_time',$request->time);
-            $query->Where('date',$request->date); 
-        });
-
-        Table::with('reservation')->where(function ($query) use ($request) {
-            $query->where('capacity', $request->marks);
-            $query->orWhere('capacity', $request->marks + 1); 
-        })->whereRelation('reservation',);
+       
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
