@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\Tables;
+namespace App\Http\Requests\Api\Orders;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckAvailableRequest extends FormRequest
+class MakeOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class CheckAvailableRequest extends FormRequest
     public function rules()
     {
         return [
-            //'time' =>'required',
-            'date' =>'required|date|after:yesterday',
-            'capacity' =>'required|numeric',
+            'table_id' =>'required|exists:tables,id',
+            'user_id' =>'required|exists:users,id',
+            'reservation_id' =>'required|exists:reservations,id',
+            'meal_id' =>'required|exists:meal,id',
         ];
     }
 }

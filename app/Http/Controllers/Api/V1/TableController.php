@@ -20,25 +20,39 @@ class TableController extends Controller
      */
     public function checkout(Request $request)
     {
-        /*
-       $checkout = Order::with(['customer','table','reservation','orderDetail'])
-       ->where('table_id',$request->table_id)
-       ->sum('total')
-       ->sum('paid')
-       ->get();*/
-       
-       $checkout = DB::table('orders as o')
-       ->join('customers as c','o.customer_id','c.id')
-       ->join('tables as t','o.table_id','t.id')
-       ->join('reservations as r','o.reservation_id','r.id')
-       ->join('order_details as od','o.id','od.order_id')
-       ->where('o.table_id',$request->table_id)
-       ->select('*')
-       ->get();
+        $checkout['info'] = DB::table('orders as o')
+            ->join('customers as c', 'o.customer_id', 'c.id')
+            //->join('tables as t','o.table_id','t.id')
+            ->join('reservations as r', 'o.reservation_id', 'r.id')
+            ->leftJoin('order_details as od', 'od.order_id', 'o.id')
+            ->leftJoin('meals as m', 'od.meal_id', 'm.id')
+            ->where('o.table_id', $request->table_id)
+            ->select(
+                'c.id as customer_id',
+                'c.name',
+                'c.phone',
+                'r.code',
+                'r.from_time',
+                'r.to_time',
+                'r.date',
+                'o.id',
+                'od.amount_to_pay',
+                'm.id as meal_id',
+                'm.price',
+                'm.description',
+                'm.discount'
+            )->get();
 
+        $checkout['total'] = DB::table('orders as o')
+            ->leftJoin('order_details as od', 'od.order_id', 'o.id')
+            ->leftJoin('meals as m', 'od.meal_id', 'm.id')
+            ->where('o.table_id', $request->table_id)
+            ->first(array(
+                DB::raw('SUM(o.total) as total'),
+                DB::raw('SUM(o.paid) as paid'),
+                DB::raw('SUM(m.discount) as discount'),
+            ));
 
-        return($checkout);
-       return $this->respondWithItem(CheckoutResource::collection($checkout));
+        return $this->respondWithItem(new CheckoutResource($checkout));
     }
-
 }

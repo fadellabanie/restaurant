@@ -15,20 +15,12 @@ class CheckoutResource extends JsonResource
      */
     public function toArray($request)
     {
-       // dd($this->customer);
         return [
-            'id' => $this->id,
-            'reservation_from' => $this->reservation->from_time,
-            'reservation_to' => $this->reservation->to_time,
-            'reservation_date' => $this->reservation->date,
-            'table_id' => $this->table->id,
-            'table_capacity' => $this->table->capacity,
-            //'customers' => [
-                
-            //    CustomersResource::Collection($this->customer),
-            //],
-            'total' => $this->total,
-            'paid' => $this->paid,
+            CheckoutInfoResource::collection($this['info']),
+            'sum_of_order' => $this['total']->total,
+            'paid' => $this['total']->paid,
+            'discount' => $this['total']->discount,
+            'total' => $this['total']->discount > $this['total']->total ? 0 : $this['total']->discount - $this['total']->total,
         ];
     }
 }

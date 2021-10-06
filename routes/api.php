@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\MealController;
+use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\TableController;
 use App\Http\Controllers\Api\V1\ReservationController;
 
@@ -26,6 +27,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('reservation-table', [ReservationController::class, 'reservation']);
 
     Route::post('meals', [MealController::class, 'list']);
+    Route::post('make-order', [OrderController::class, 'make']);
 
     Route::get('checkout', [TableController::class, 'checkout']);
 });

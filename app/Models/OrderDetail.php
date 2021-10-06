@@ -16,9 +16,9 @@ class OrderDetail extends Model
      #################
     ### Relations ###
     #################
-    public function orders()
+    public function order()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsTo(Order::class);
     }
     public function meal()
     {

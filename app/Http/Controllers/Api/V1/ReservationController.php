@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\Table;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Tables\CheckAvailableRequest;
+use App\Http\Resources\Tables\TableResource;
 use App\Http\Requests\Api\Tables\ReservationRequest;
+use App\Http\Requests\Api\Tables\CheckAvailableRequest;
 
 class ReservationController extends Controller
 {
@@ -18,6 +20,7 @@ class ReservationController extends Controller
      */
     public function checkAvailable(CheckAvailableRequest $request)
     {
+        /*
         $reservation = Reservation::with(['table' => function ($q) use ($request) {
             $q->where('capacity', $request->marks);
             $q->orWhere('capacity', $request->marks + 1); // to get customer
@@ -27,8 +30,21 @@ class ReservationController extends Controller
         });
 
         if($reservation) return $this->errorStatus('unfortunately we dont have table for reservation');
+*/
 
-        return $this->successStatus('We have table for reservation');
+            $usedTables = DB::table('reservations')
+            ->where(function($q) use ($request){
+                $q->where('to_time','=<',$request->from);
+                $q->where('from_time','=>',$request->to);
+            })
+            ->select('table_id')->pluck('table_id');
+            
+            $availableTable = DB::table('tables')->whereNotIn('id',$usedTables)
+            ->get();
+     
+
+            return $this->respondWithItem(TableResource::collection($availableTable));
+
     }
 
     /**
@@ -42,7 +58,6 @@ class ReservationController extends Controller
         Reservation::create($request->all());
 
         return $this->successStatus('reservation successfully');
-
     }
 
     /**
