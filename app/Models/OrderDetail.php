@@ -9,14 +9,16 @@ class OrderDetail extends Model
 {
     use HasFactory;
 
+  
+
     protected $fillable = ['order_id', 'meal_id', 'amount_to_pay'];
 
      #################
     ### Relations ###
     #################
-    public function order()
+    public function orders()
     {
-        return $this->hasOne(Order::class);
+        return $this->hasMany(Order::class);
     }
     public function meal()
     {

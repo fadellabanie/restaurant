@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\V1\ReservationController;
-use App\Http\Controllers\Api\V1\MealController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\MealController;
+use App\Http\Controllers\Api\V1\TableController;
+use App\Http\Controllers\Api\V1\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,5 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::post('meals', [MealController::class, 'list']);
 
-    Route::post('checkout', [TableController::class, 'checkout']);
+    Route::get('checkout', [TableController::class, 'checkout']);
 });

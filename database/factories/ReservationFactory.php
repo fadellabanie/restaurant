@@ -27,9 +27,11 @@ class ReservationFactory extends Factory
         return [
             'table_id'=> Table::factory(),
             'customer_id'=> Customer::factory(),
+            'code' => 'rsv-'.substr(md5(microtime()),rand(0,26),5),
             'date'=> now()->addDays($this->faker->randomNumber(1)),
             'from_time'=> now(),
             'to_time'=> now()->addHours(3),
+            'status'=>  $this->faker->randomElement([Reservation::AVAILABLE, Reservation::UNAVAILABLE]),
         ];
     }
 

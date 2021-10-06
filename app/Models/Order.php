@@ -16,19 +16,23 @@ class Order extends Model
     #################
     public function table()
     {
-        return $this->hasOne(Table::class);
+        return $this->belongsTo(Table::class);
     }
     public function customer()
     {
-        return $this->hasOne(Customer::class);
+        return $this->belongsTo(Customer::class);
     } 
     public function reservation()
     {
-        return $this->hasOne(Reservation::class);
+        return $this->belongsTo(Reservation::class);
     } 
     public function waiter()
     {
         return $this->hasOne(Waiter::class);
+    }  
+    public function orderDetail()
+    {
+        return $this->belongsTo(OrderDetail::class);
     } 
 
 }

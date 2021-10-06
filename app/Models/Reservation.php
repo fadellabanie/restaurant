@@ -9,17 +9,20 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['table_id','customer_id','date','from_time','to_time'];
+    const AVAILABLE = 0 ;
+    const UNAVAILABLE = 1 ;
+
+    protected $fillable = ['table_id','customer_id','code','date','from_time','to_time','status'];
  
     #################
     ### Relations ###
     #################
     public function table()
     {
-        return $this->belongsTo(Table::class);
+        return $this->hasOne(Table::class);
     }
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->hasOne(Customer::class);
     } 
 }
