@@ -22,7 +22,6 @@ class MealTinyResource extends JsonResource
             'quantity_available' => $this->quantity_available,
             'discount' => $this->discount,
             'type' => $this->type,
-            'quantity' => $this->quantity, 
         ];
     }
 }

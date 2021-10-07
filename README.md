@@ -11,9 +11,9 @@ if you are mac os user
 3. php artisan key:generate
 4. php artisan migrate
 5. php artisan db:seed
-6. php artisan server
 
 or 
 
 2. windows user install any web server lamp , nginx
 and start steps from composer install
+    6. php artisan server 

@@ -59,11 +59,13 @@ class TableController extends Controller
 
     public function print(Request $request)
     {
-        $customer = Customer::find(1);
-        $orderDetail = Order::with('orderDetail','meal')->where('customer_id', 32)
-            ->where('table_id',23)
+        $customer = Customer::find($request->customer_id);
+        $orderDetail = Order::with('orderDetail', 'meal')->where('customer_id', $request->customer_id)
+            ->where('table_id', $request->table_id)
             ->first();
-        //dd($orderDetail);
+        if (!$orderDetail) {
+            return $this->errorStatus("Wrong argument");
+        }
         $customer = new Buyer([
             'name'          => $customer->name,
             'custom_fields' => [

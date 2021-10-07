@@ -25,7 +25,7 @@ class CheckAvailableRequest extends FormRequest
     {
         return [
             //'time' =>'required',
-            'date' =>'required|date|after:yesterday',
+            'date' =>'required|date|date_format:Y-m-d|after:yesterday',
             'capacity' =>'required|numeric',
         ];
     }

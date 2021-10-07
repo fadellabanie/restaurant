@@ -19,10 +19,10 @@ class Reservation extends Model
     #################
     public function table()
     {
-        return $this->hasOne(Table::class);
+        return $this->belongsTo(Table::class);
     }
     public function customer()
     {
-        return $this->hasOne(Customer::class);
+        return $this->belongsTo(Customer::class);
     } 
 }

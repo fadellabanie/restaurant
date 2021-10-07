@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\MealController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\TableController;
 use App\Http\Controllers\Api\V1\ReservationController;
+use App\Http\Controllers\Api\V1\ConstantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,17 +19,18 @@ use App\Http\Controllers\Api\V1\ReservationController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::group(['prefix' => 'v1'], function () {
+    ## Constant
+    Route::get('customers', [ConstantController::class, 'customer']);
+
     Route::post('check-available-table', [ReservationController::class, 'checkAvailable']);
     Route::post('reservation-table', [ReservationController::class, 'reservation']);
+    Route::post('reservation', [ReservationController::class, 'show']);
 
-    Route::post('meals', [MealController::class, 'list']);
+    Route::get('meals', [MealController::class, 'list']);
     Route::post('make-order', [OrderController::class, 'make']);
 
     Route::get('checkout', [TableController::class, 'checkout']);
-    Route::get('print', [TableController::class, 'print']);
+    Route::post('print', [TableController::class, 'print']);
 });

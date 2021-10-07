@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Table;
 use App\Models\Reservation;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Tables\TableResource;
+use App\Http\Resources\Reservations\ReservationResource;
 use App\Http\Requests\Api\Tables\ReservationRequest;
 use App\Http\Requests\Api\Tables\CheckAvailableRequest;
+use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
@@ -25,9 +25,9 @@ class ReservationController extends Controller
                 $q->where('to_time', '=<', $request->from);
                 $q->where('from_time', '=>', $request->to);
             })->select('table_id')->pluck('table_id');
-            
+
         $availableTable = DB::table('tables')->whereNotIn('id', $usedTables)
-        ->get();
+            ->get();
 
         return $this->respondWithItem(TableResource::collection($availableTable));
     }
@@ -41,8 +41,30 @@ class ReservationController extends Controller
     public function reservation(ReservationRequest $request)
     {
         $request['from_time'] = now();
-        Reservation::create($request->all());
+        $reservation = Reservation::where('table_id', $request->table_id)
+            ->where('customer_id', $request->customer_id)
+            ->where('to_time', $request->to_time)
+            ->where('date', $request->date)->first();
 
-        return $this->successStatus('reservation successfully');
+        if ($reservation) {
+            return $this->errorStatus('reservation before');
+        }
+        $reservation = Reservation::create($request->all());
+
+        return $this->respondWithItemName('reservation_id', $reservation->id, 'reservation successfully');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request)
+    {
+
+        $reservation = Reservation::with(['table', 'customer'])
+            ->findOrFail($request->reservation_id);
+
+        return $this->respondWithItem(new ReservationResource($reservation));
     }
 }
