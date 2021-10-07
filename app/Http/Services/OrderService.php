@@ -26,7 +26,6 @@ class OrderService
 				'reservation_id' => $data['reservation_id'], ## 
 				'total' => $meal->price, ## 
 				'paid' => $meal->price - $meal->discount, ## should before make order display meals with discount after that customer send what he paid in request
-
 			]);
 
 			DB::commit();

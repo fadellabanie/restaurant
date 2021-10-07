@@ -19,6 +19,7 @@ class CreateMealsTable extends Migration
             $table->text('description');
             $table->integer('quantity_available');
             $table->double('discount');
+            $table->tinyInteger('type');
             $table->timestamps();
         });
     }

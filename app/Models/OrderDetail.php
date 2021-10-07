@@ -13,15 +13,18 @@ class OrderDetail extends Model
 
     protected $fillable = ['order_id', 'meal_id', 'amount_to_pay'];
 
+    public $with = ['meal'];
+
      #################
     ### Relations ###
     #################
+
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
     public function meal()
     {
-        return $this->hasOne(Meal::class);
+        return $this->belongsTo(Meal::class);
     } 
 }

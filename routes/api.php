@@ -30,4 +30,5 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('make-order', [OrderController::class, 'make']);
 
     Route::get('checkout', [TableController::class, 'checkout']);
+    Route::get('print', [TableController::class, 'print']);
 });

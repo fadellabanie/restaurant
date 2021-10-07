@@ -26,6 +26,7 @@ class MealFactory extends Factory
             'description'=> $this->faker->sentence,
             'quantity_available'=> $this->faker->randomNumber(4),
             'discount'=> $this->faker->randomNumber(2),
+            'type'=> $this->faker->randomElement([Meal::BREAKFAST, Meal::LAUNCH, Meal::DINNER, Meal::APPETIZER]),
           
         ];
     }

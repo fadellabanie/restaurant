@@ -20,31 +20,16 @@ class ReservationController extends Controller
      */
     public function checkAvailable(CheckAvailableRequest $request)
     {
-        /*
-        $reservation = Reservation::with(['table' => function ($q) use ($request) {
-            $q->where('capacity', $request->marks);
-            $q->orWhere('capacity', $request->marks + 1); // to get customer
-        }])->where(function ($query) use ($request) {
-            $query->where('to_time', $request->time);
-            $query->Where('date', $request->date);
-        });
-
-        if($reservation) return $this->errorStatus('unfortunately we dont have table for reservation');
-*/
-
-            $usedTables = DB::table('reservations')
-            ->where(function($q) use ($request){
-                $q->where('to_time','=<',$request->from);
-                $q->where('from_time','=>',$request->to);
-            })
-            ->select('table_id')->pluck('table_id');
+        $usedTables = DB::table('reservations')
+            ->where(function ($q) use ($request) {
+                $q->where('to_time', '=<', $request->from);
+                $q->where('from_time', '=>', $request->to);
+            })->select('table_id')->pluck('table_id');
             
-            $availableTable = DB::table('tables')->whereNotIn('id',$usedTables)
-            ->get();
-     
+        $availableTable = DB::table('tables')->whereNotIn('id', $usedTables)
+        ->get();
 
-            return $this->respondWithItem(TableResource::collection($availableTable));
-
+        return $this->respondWithItem(TableResource::collection($availableTable));
     }
 
     /**
@@ -55,42 +40,9 @@ class ReservationController extends Controller
      */
     public function reservation(ReservationRequest $request)
     {
+        $request['from_time'] = now();
         Reservation::create($request->all());
 
         return $this->successStatus('reservation successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

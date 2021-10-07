@@ -34,5 +34,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     } 
+     public function meal()
+    {
+        return $this->belongsToMany(Meal::class,'order_details','meal_id','order_id');
+    } 
 
 }

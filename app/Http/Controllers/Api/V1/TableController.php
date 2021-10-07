@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Order;
-use App\Models\Table;
-use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CheckOut\CheckoutResource;
-use App\Http\Requests\Api\Tables\CheckAvailableRequest;
+use App\Models\Customer;
+use App\Models\Order;
+use LaravelDaily\Invoices\Invoice;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
 
 class TableController extends Controller
 {
@@ -54,5 +55,29 @@ class TableController extends Controller
             ));
 
         return $this->respondWithItem(new CheckoutResource($checkout));
+    }
+
+    public function print(Request $request)
+    {
+        $customer = Customer::find(1);
+        $orderDetail = Order::with('orderDetail','meal')->where('customer_id', 32)
+            ->where('table_id',23)
+            ->first();
+        //dd($orderDetail);
+        $customer = new Buyer([
+            'name'          => $customer->name,
+            'custom_fields' => [
+                'phone' => $customer->phone,
+            ],
+        ]);
+
+        $item = (new InvoiceItem())->title($orderDetail->meal->first()->description)->pricePerUnit(2);
+
+        $invoice = Invoice::make()
+            ->buyer($customer)
+            ->taxRate(15)
+            ->addItem($item);
+
+        return $invoice->stream();
     }
 }

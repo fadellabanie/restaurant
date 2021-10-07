@@ -26,8 +26,8 @@ class ReservationRequest extends FormRequest
         return [
           'table_id' => 'required|exists:tables,id',
           'customer_id' => 'required|exists:customer,id',
-          'from_time' => 'required',
-          'to_time' => 'required',
+          //'from_time' => 'required|date_format:H:i',
+          'to_time' => 'required|date_format:H:i',
           'date' =>'required|date|after:yesterday',
         ];
     }

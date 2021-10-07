@@ -16,7 +16,7 @@ class MealController extends Controller
      */
     public function list()
     {
-        $meals = Meal::get();
+        $meals = Meal::available()->groupBy('type')->get();
 
         return new MealCollection($meals);
     }
